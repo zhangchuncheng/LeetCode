@@ -34,3 +34,36 @@ Note: The given binary tree has not more than 10000 nodes. The height of the tre
 历史题目和总结见公众号「每日一道算法题」
 
 https://leetcode.com/problems/longest-univalue-path/description/
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    int result = 0;
+public:
+    int longestUnivaluePath(TreeNode* root) 
+    {
+        int temp = DFS(root);
+        return max(0,result-1);
+    }
+    int DFS(TreeNode* root) 
+    {
+        if(root==NULL) return 0;
+        int L = DFS(root->left);
+        int R = DFS(root->right);
+        
+        int LL = 0;
+        int RR = 0;
+        if(root->left!=NULL && root->left->val==root->val) LL = L;
+        if(root->right!=NULL && root->right->val==root->val) RR = R;
+        result = max(result, LL+RR+1);
+        return max(LL+1, RR+1);
+    }
+};
