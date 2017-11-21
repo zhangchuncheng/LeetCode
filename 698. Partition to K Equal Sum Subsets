@@ -11,8 +11,11 @@ Note:
 1 <= k <= len(nums) <= 16.
 0 < nums[I] < 10000.
 
-提示：提交代码后，需要用简洁的语言解释一下代码思路~ 谢谢
-
-历史题目和总结见公众号「每日一道算法题」
-
 https://leetcode.com/problems/partition-to-k-equal-sum-subsets/description/
+
+
+
+
+
+
+
