@@ -1,0 +1,66 @@
+668. Kth Smallest Number in Multiplication Table
+
+Nearly every one have used the Multiplication Table. But could you find out the k-th smallest number quickly from the multiplication table?
+
+Given the height m and the length n of a m * n Multiplication Table, and a positive integer k, you need to return the k-th smallest number in this table.
+
+Example 1:
+Input: m = 3, n = 3, k = 5
+Output: 
+Explanation: 
+The Multiplication Table:
+1	2	3
+2	4	6
+3	6	9
+
+The 5-th smallest number is 3 (1, 2, 2, 3, 3).
+
+Example 2:
+Input: m = 2, n = 3, k = 6
+Output: 
+Explanation: 
+The Multiplication Table:
+1	2	3
+2	4	6
+
+The 6-th smallest number is 6 (1, 2, 2, 3, 4, 6).
+
+Note:
+The m and n will be in the range [1, 30000].
+The k will be in the range [1, m * n]
+
+https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/description/
+
+解：
+    此题非常巧妙的用到了二分（值）查找的思想。
+    
+    初始状态left=1,right=n*m. 每次确定mid之后，计算乘法表里小于等于mid的数目。这是要按照行i=1:m进行遍历就行，count+=min(mid/i,n);
+    
+    如果得到的count<k,那么显然这个mid太小，不满足条件，需要上调左边界，即left=mid+1;反之，count>k的话，则说明这个mid可能太大，但也可能正好就是答案（例如有很多重复的mid），无法确定，因此可以将其纳入右边界（闭区间），即right=mid，（因为答案不可能比mid更大了）。
+    
+    这种二分逼近得到的结果x是什么呢？ 得到的是乘法表里小于等于x的元素个数不少于k的、且最小的那个数字。这其实就是特求的地k个元素。
+    
+    但注意有一个问题需要考虑，最终左右指针相遇得到的这个数x一定会是出现在乘法表里的吗？表面上看不出来，但是答案是肯定的。这是因为满足“乘法表里小于等于x的元素个数不少于k的”，这样的x可能会有很多，但最小的那个一定是出现在乘法表里的。
+    
+
+class Solution {
+public:
+    int findKthNumber(int m, int n, int k) {
+        int left = 1;
+        int right = m * n;
+        int mid;
+        
+        while (left < right) {
+            mid = left + (right - left) / 2;
+            int count = 0;
+            for(int i = 1; i <= m; i ++)
+                count += min(mid/i, n);
+            if (count < k)
+                left = mid + 1;
+            else
+                right = mid;
+        }
+        
+        return left;
+    }
+};
