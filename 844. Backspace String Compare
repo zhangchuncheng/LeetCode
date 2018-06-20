@@ -1,0 +1,56 @@
+844. Backspace String Compare
+
+Given two strings S and T, return if they are equal when both are typed into empty text editors. # means a backspace character.
+
+Example 1:
+
+Input: S = “ab#c”, T = “ad#c”
+Output: true
+Explanation: Both S and T become “ac”.
+
+https://leetcode.com/problems/backspace-string-compare/description/
+
+class Solution {
+    //Time Complexity: 0(m + n)
+    //Space Complexity: 0(1)
+    public boolean backspaceCompare(String S, String T) {
+        //step 0. scan form right to left, use two pointers to mark the current index of the two characters in the strings.
+        //that should match
+        //step 1. use a counter to calculate the freqs of '#' and skip all characters that should be deleted by backspaces '#'
+        //step 2. when the pointer stop, check if the chars are identical or the scanning is both strings.
+        
+        int i = S.length() - 1;
+        int j = T.length() - 1;
+        int count = 0;
+        while (i >= 0 || j >= 0) {
+            count = 0;
+            while (i >= 0) {
+                if (S.charAt(i) == '#' || count > 0) {
+                    count += S.charAt(i) == '#' ? 1 : -1;
+                    i--;
+                } else {
+                    break;
+                }    
+            }
+            count = 0;
+            while (j >=0) {
+                if (T.charAt(j) == '#' || count > 0) {
+                    count += T.charAt(j) == '#' ? 1 : -1;
+                    j--;
+                } else {
+                    break;
+                }
+            }
+            
+            if (i < 0 || j < 0 || S.charAt(i) != T.charAt(j)) {
+                return i == -1 && j == -1;
+            }
+            
+            i--;
+            j--;
+        }
+        
+        return true;
+        
+    }
+}
