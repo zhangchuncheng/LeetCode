@@ -1,0 +1,58 @@
+761. Special Binary String
+
+Special binary strings are binary strings with the following two properties:
+
+The number of 0’s is equal to the number of 1’s.
+Every prefix of the binary string has at least as many 1’s as 0’s.
+Given a special string S, a move consists of choosing two consecutive, non-empty, special substrings of S, and swapping them. (Two strings are consecutive if the last character of the first string is exactly one index before the first character of the second string.)
+
+At the end of any number of moves, what is the lexicographically largest resulting string possible?
+
+Example 1:
+Input: S = “11011000”
+Output: “11100100”
+Explanation:
+The strings “10” [occuring at S[1]] and “1100” [at S[3]] are swapped.
+This is the lexicographically largest string possible after some number of swaps.
+Note:
+
+S has length at most 50.
+S is guaranteed to be a special binary string as defined above.
+
+https://leetcode.com/problems/special-binary-string/description/
+
+/*
+首先，应该容易分析出：对于一个special string S, 它整体可以拆分为一个或若干个不可再拆分的、连续的sub special string。
+对于每个不可再连续拆分的sub specoal string S'， 它的首位一定是1，末尾一定是0，中间一定是一个special string，
+于是可能还可以继续拆分下去。
+
+写成式子就是：任何S = (1)ABCDEF(0)，首位的1和末位的0可能存在，而中间的ABCDEF都还是不可连续拆分的special string。
+
+因为题目规定的swap的规则必须是在相邻的special string之间进行，所以对于任何一个S，只能通过内部的ABCDEF这些S'之间的位置调整，
+使得S自身调整至字典序最大（暂时不考虑ABCDEF内部的调整，假设它们已经各自典顺序最优）。那么如何调整ABCDEF使得S的字典序最大呢？
+显然，只要让ABCDEF按照字典序从大到小排列即可。
+
+这就有了地柜的思路。把S拆成ABCDEF，让它们各自递归成字典序最大，然后优化的ABCDEF按字典序重排，既能得到字典序最大的S。
+*/
+class Solution {
+public:
+    string makeLargestSpecial(string S) {
+        int count=0;
+        int k=0;
+        vector<string>temp;
+        for(int i=0; i<S.size(); i++) {
+            if(S[i]=='1')
+                count+=1;
+            else
+                count -=1;
+            if(count == 0) {
+                temp.push_back("1" + makeLargestSpecial(S.substr(k+1, i-k-1)) + "0");
+                k = i + 1;
+            }
+        }
+        sort(temp.begin(), temp.end(), greater<string>());
+        string result;
+        for(auto a:temp) result += a;
+        return result;
+    }
+};
