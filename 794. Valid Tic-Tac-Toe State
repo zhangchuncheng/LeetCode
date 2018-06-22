@@ -36,6 +36,13 @@ Each board[I][j] is a character in the set {“ “, “X”, “O”}.
 
 https://leetcode.com/problems/valid-tic-tac-toe-state/description/
 
+/*  
+此题猛一看会觉得是DFS或BFS，从一个空气盘开始进行搜索，查看是否能够搜索到需要的状态，其实有更巧妙的解法。
+首先，对弈一个棋盘的状态，X的数目只可能比O的数目多1，或者两者相等，除此之外的可以排除。
+其次，当X的数目比O的数目多1时，说明最后一步时X落子，那么O不可能此时在盘面上获胜，故如果发现win（'O'）就返回false
+类似的，当X的数目与O的数目相等时，说明最后一步时O落子，那么X不可能此时在盘面上获胜，故如果发现win('X')就返回false
+至于其他的情况，不管两边棋子怎么摆放，都是可能的。
+*/
 class Solution {
 public:
     bool validTicTacToe(vector<string>& board) {
