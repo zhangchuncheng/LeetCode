@@ -1,0 +1,38 @@
+205. Isomorphic Strings
+
+Given two strings s and t, determine if they are isomorphic.
+
+Two strings are isomorphic if the characters in s can be replaced to get t.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character but a character may map to itself.
+
+Example 1:
+
+Input: s = "egg", t = "add"
+Output: true
+Example 2:
+
+Input: s = "foo", t = "bar"
+Output: false
+Example 3:
+
+Input: s = "paper", t = "title"
+Output: true
+
+https://leetcode.com/problems/isomorphic-strings/description/
+
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        Map<Character, Integer> m1 = new HashMap<>();
+        Map<Character, Integer> m2 = new HashMap<>();
+        for(Integer i = 0; i < s.length(); i++) {
+            //根据map中put方法的返回值进行比较当前值
+            //put入新的值返回null
+            //put入旧的值返回新地址
+            if(m1.put(s.charAt(i), i) != m2.put(t.charAt(i), i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
